@@ -1,8 +1,8 @@
 class Cube < Formula
   desc "Self-hosted coding-agent sandboxes on a VM you own"
   homepage "https://github.com/cubeyard/cube"
-  url "https://github.com/cubeyard/cube/releases/download/v0.1.18/cube"
-  sha256 "3c0c00c6fd961e34c083b999a2bb98b6c6219f6890cbd7b72215a7721430f068"
+  url "https://github.com/cubeyard/cube/releases/download/v0.1.19/cube"
+  sha256 "fa5c04a64e2013150c955c4cdbf5082e68fa90b9d8b5be15e63485f8dc9787e4"
   license "Apache-2.0"
 
   depends_on :macos
