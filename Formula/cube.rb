@@ -20,7 +20,8 @@ class Cube < Formula
     # only this one's may stay in the keg (brew audit refuses the others).
     # They live under node_modules/.pnpm, so the glob must match dot directories.
     Dir.glob(libexec/"app/**/native/*/prebuilds/*", File::FNM_DOTMATCH).each do |dir|
-      next if !File.directory?(dir) || (File.basename(dir).start_with?("darwin-") && File.basename(dir).include?("arm64"))
+      name = File.basename(dir)
+      next if !File.directory?(dir) || (name.start_with?("darwin-") && name.include?("arm64"))
 
       rm_r(dir)
     end
