@@ -42,10 +42,10 @@ class CubeRunner < Formula
 
   def caveats
     <<~EOS
-      The runner needs Hypervisor.framework and a Debian 13 genericcloud arm64 image.
-      Set it up from the cube formula with:
-        cubed runners init-local --image /path/to/debian-13-genericcloud-arm64.qcow2
-      then: brew services start cube-runner
+      The runner needs Hypervisor.framework. Set it up from the cube formula with
+        cubed runners init-local
+      (downloads Debian's genericcloud arm64 image, checksum-verified; --image takes
+      one you have), then: brew services start cube-runner
       After brew upgrade: brew services restart cube-runner (a running service is not restarted).
       Its state (key, base image, machine disks) is ~/.cube; uninstalling keeps it.
       QEMU runs as your user; a thread's machine is the sandbox, this Mac is not.
