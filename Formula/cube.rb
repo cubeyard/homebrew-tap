@@ -8,7 +8,7 @@ class Cube < Formula
   license "Apache-2.0"
 
   depends_on arch: :arm64
-  depends_on "cube-runner"
+  depends_on "cubeyard/tap/cube-runner"
   depends_on "gh"
   depends_on :macos
 
@@ -29,8 +29,7 @@ class Cube < Formula
         set +a
       fi
       export CUBE_RUNNER="${CUBE_RUNNER:-#{HOMEBREW_PREFIX}/opt/cube-runner/bin/cube-runner}"
-      export CUBED_VERSION="${CUBED_VERSION:-v0.3.18}"
-      export CUBED_COMMIT="${CUBED_COMMIT:-89ad65e77e1243e2442812f7f3645a0ec710e03f}"
+      export CUBED_VERSION="v0.3.18" CUBED_COMMIT="89ad65e77e1243e2442812f7f3645a0ec710e03f"
       exec "#{libexec}/bin/node" "#{libexec}/app/packages/server/src/index.ts" "$@"
     SH
     chmod 0755, bin/"cubed"
@@ -39,7 +38,7 @@ class Cube < Formula
   service do
     run [opt_bin/"cubed"]
     keep_alive true
-    restart_delay 5
+    stop_timeout 60
     log_path var/"log/cubed.log"
     error_log_path var/"log/cubed.log"
     environment_variables PATH: std_service_path_env
@@ -56,14 +55,15 @@ class Cube < Formula
       authentication; keep it there or behind an authenticated private network.
       Settings go in ~/.config/cubed/environment (CUBED_STATE, CUBED_HOST,
       CUBED_ALLOWED_HOSTS, CUBED_CLAUDE, ...). State: ~/.cube-host and ~/.cube;
-      uninstalling keeps both. brew upgrade updates cubed and cube-runner.
+      uninstalling keeps both. After brew upgrade, restart the services:
+        brew services restart cube-runner cube
     EOS
   end
 
   test do
     assert_match "cubed", shell_output("#{bin}/cubed --version")
     assert_match "runners status", shell_output("#{bin}/cubed --help")
-    check = JSON.parse(shell_output("#{libexec}/bin/node #{libexec}/app/packages/server/src/index.ts --self-check"))
+    check = JSON.parse(shell_output("#{bin}/cubed --self-check"))
     assert_equal "v0.3.18", check["version"]
     assert_match(/^cube-gateway /, check["gateway"])
   end
